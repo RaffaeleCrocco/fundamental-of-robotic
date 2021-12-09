@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<sdf version="1.4">
+    <model name="lego_712">
+        <link name="link">
+            <inertial>
+                <mass>0.00481974</mass>
+                <inertia>
+                    <ixx>4.20611e-07</ixx>
+                    <ixy>2.12405e-09</ixy>
+                    <ixz>-9.91584e-08</ixz>
+                    <iyy>1.96335e-06</iyy>
+                    <iyz>-5.14119e-10</iyz>
+                    <izz>1.55323e-06</izz>
+                </inertia>
+            </inertial>
+            <origin pose="0 0 0 0 0 0"/>
+            <collision name="collision">
+                <geometry>
+                    <mesh>
+                        <scale>1 1 1</scale>
+                        <uri>model://lego_712/meshes/712.stl</uri>
+                    </mesh>
+                </geometry>
+                <surface>
+                    <contact>
+                    <poissons_ratio>0.347</poissons_ratio>
+                    <elastic_modulus>8.8e+09</elastic_modulus>
+                    <ode>
+                        <kp>100000</kp>
+                        <kd>1</kd>
+                        <max_vel>1</max_vel>
+                        <min_depth>0.001</min_depth>
+                    </ode>
+                    </contact>
+                    <friction>
+                    <torsional>
+                        <coefficient>1</coefficient>
+                        <use_patch_radius>0</use_patch_radius>
+                        <surface_radius>0.05</surface_radius>
+                        <ode/>
+                    </torsional>
+                    <ode/>
+                    </friction>
+                    <bounce/>
+                </surface>
+            </collision>
+            <visual name="visual">
+                <geometry>
+                    <mesh>
+                        <scale>1 1 1</scale>
+                        <uri>model://lego_712/meshes/712.stl</uri>
+                    </mesh>
+                </geometry>
+            </visual>
+        </link>
+    </model>
+</sdf>

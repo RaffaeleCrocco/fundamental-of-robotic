@@ -1,0 +1,6 @@
+devel_space: /home/raptor/robotica/devel
+install: false
+install_space: /home/raptor/robotica/install
+profile: default
+source_space: /home/raptor/robotica/src
+workspace: /home/raptor/robotica

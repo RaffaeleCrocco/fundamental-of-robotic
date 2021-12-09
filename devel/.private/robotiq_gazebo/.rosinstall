@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/raptor/robotica/devel/.private/robotiq_gazebo/setup.sh

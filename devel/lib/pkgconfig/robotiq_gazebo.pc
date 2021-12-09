@@ -1,0 +1,1 @@
+/home/raptor/robotica/devel/.private/robotiq_gazebo/lib/pkgconfig/robotiq_gazebo.pc

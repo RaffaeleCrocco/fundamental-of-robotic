@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/raptor/robotica/devel/.private/ur5_description/setup.sh
