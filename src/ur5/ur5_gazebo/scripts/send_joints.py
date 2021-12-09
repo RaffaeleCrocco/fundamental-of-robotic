@@ -194,7 +194,7 @@ def main():
         pts = JointTrajectoryPoint()
 
         # Final position of end-effector
-        x = [2.2, -2, 0.6]
+        x = [2.2, -2, 0]
         x = np.transpose(x)
         th1, th2, th3 = ur5Inverse(x, [3, 3, 3])
 
