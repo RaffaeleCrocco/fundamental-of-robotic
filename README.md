@@ -23,3 +23,9 @@ You can send commands to the gripper (value between 0.0 and 0.8)
   ```
   rosrun ur5_gazebo send_gripper.py --value 0.5
   ```
+You can visualize the camera feed
+
+ ```
+ rqt
+ ```
+Go to plugins -> visualization -> image view and then select /ur5/usbcam/image_raw
