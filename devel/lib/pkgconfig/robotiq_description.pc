@@ -1,1 +1,0 @@
-/home/raptor/robotica/devel/.private/robotiq_description/lib/pkgconfig/robotiq_description.pc
