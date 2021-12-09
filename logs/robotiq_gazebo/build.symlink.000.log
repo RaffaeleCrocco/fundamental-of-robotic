@@ -1,5 +1,0 @@
-Symlinking /home/raptor/robotica/devel/lib/libgazebo_mimic_joint_plugin.so
-Symlinking /home/raptor/robotica/devel/lib/libgazebo_disable_link_plugin.so
-Symlinking /home/raptor/robotica/devel/lib/pkgconfig/robotiq_gazebo.pc
-Symlinking /home/raptor/robotica/devel/share/robotiq_gazebo/cmake/robotiq_gazeboConfig.cmake
-Symlinking /home/raptor/robotica/devel/share/robotiq_gazebo/cmake/robotiq_gazeboConfig-version.cmake
