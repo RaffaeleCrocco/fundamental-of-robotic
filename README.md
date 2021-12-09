@@ -12,8 +12,7 @@ To launch the the gazebo simulation
   ```
   roslaunch ur5_gazebo ur5_lego.launch
   ```
-Unpause the simulation
-You can send commands to the joints
+Unpause the simulation. You can send commands to the joints
 
   ```
   rosrun ur5_gazebo send_joint.py
