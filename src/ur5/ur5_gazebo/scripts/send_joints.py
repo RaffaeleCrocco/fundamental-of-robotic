@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 
 from trajectory_msgs.msg import JointTrajectory
 from std_msgs.msg import Header
