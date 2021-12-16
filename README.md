@@ -29,4 +29,4 @@ You can visualize the camera feed
  ```
  rqt
  ```
-Go to plugins -> visualization -> image view and then select /ur5/usbcam/image_raw
+Go to plugins -> visualization -> image view and then select /camera/color/image_raw or /camera/depth/image_raw
