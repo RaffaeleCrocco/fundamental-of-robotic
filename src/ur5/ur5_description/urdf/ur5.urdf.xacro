@@ -20,10 +20,6 @@
   <xacro:property name="wrist_2_cog" value="0.0 0.0018 0.11099" />
   <xacro:property name="wrist_3_cog" value="0.0 0.001159 0.0" />
 
-  <!-- Trying to implement teh camera on the robot-->
-  <xacro:property name="camera_link" value="0.02" /> <!-- Size of square 'camera' box -->
-
-
   <!-- Kinematic model -->
   <!-- Properties from urcontrol.conf -->
   <!--
@@ -336,36 +332,6 @@
       <parent link="${prefix}wrist_3_link"/>
       <child link="${prefix}tool0"/>
     </joint>
-
-  <joint name="camera_joint" type="fixed">
-    <axis xyz="0 1 0" />
-    <origin xyz="-0.02 0.0 0.055" rpy="0 0 0"/>
-    <parent link="ee_link"/>
-    <child link="camera_link"/>
-  </joint>
-
-  <!-- Camera -->
-  <link name="camera_link">
-    <collision>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-      <geometry>
-	<box size="${camera_link} ${camera_link} ${camera_link}"/>
-      </geometry>
-    </collision>
-    <visual>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-      <geometry>
-	<box size="${camera_link} ${camera_link} ${camera_link}"/>
-      </geometry>
-      <material name="green"/>
-    </visual>
-
-    <inertial>
-      <mass value="1e-5" />
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
-    </inertial>
-  </link>
 
   </xacro:macro>
 </robot>
