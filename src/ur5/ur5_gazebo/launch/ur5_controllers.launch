@@ -16,8 +16,7 @@
         args="joint_state_controller trajectory_controller gripper_controller"/>
 
   <!-- TF -->
-  <node pkg="robot_state_publisher" type="robot_state_publisher"
-        name="robot_state_publisher">
+  <node name="state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
     <param name="publish_frequency"  type="double" value="50" />
   </node>
 
