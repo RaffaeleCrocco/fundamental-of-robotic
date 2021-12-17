@@ -12,7 +12,6 @@
       <geometry>
         <mesh filename="package://robotiq_description/meshes/robotiq_85_coupler.stl" />
       </geometry>
-      <material name="flat_black"/>
     </visual>
     <collision>
       <geometry>
