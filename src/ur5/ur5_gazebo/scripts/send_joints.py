@@ -251,21 +251,23 @@ def main():
     rate = rospy.Rate(10)
     position = 0
     samples = np.arange(0.001, 0.99, step=0.012)
-    Th = []
 
+    #Initial rotation of the joints
     TH0 = [0, -1.5, 1.0, 0.0, 0.0, 0]
-    print(TH0)
+    
     xe0, Re = ur5Direct(TH0)
     phie0 = np.transpose(rotm2eul(Re))
-
-    xef = np.array([-0.4, 0.4, 0.4]) #Final position of end effector
+    
+    #Final position of end effector
+    xef = np.array([-0.4, 0.4, 0.4]) 
     xef = np.transpose(xef)
-    phief = np.array([np.pi/2, np.pi, 0]) #Final orientation of end effector
+    
+    #Final orientation of end effector
+    phief = np.array([np.pi/2, np.pi, 0]) 
     phief = np.transpose(phief)
 
     xe = lambda t: np.dot(t,xef) + np.dot((1-t),xe0)
     phie = lambda t: np.dot(t,phief) + np.dot((1-t),phie0)
-
 
     while not rospy.is_shutdown():
         x = xe(1)
@@ -273,22 +275,10 @@ def main():
         phi = np.transpose(phi)
         Th = ur5Inverse(x, rot.from_euler('ZYX', [phi[0], phi[1], phi[2]]).as_dcm())
 
-        #xe = [0.5, 0.5, 0.8]
-        #xe = np.transpose(xe)
-        #eye = [[1,0,0], [0,1,0], [0,0,1]]
-        #Th = ur5Inverse(xe, eye)
-
         traj.header.stamp = rospy.Time.now()
         pts = JointTrajectoryPoint()
 
-        #pts.positions = [0, -1.5, 1.0, 0, 0, 0]
-        '''print(Th[6][0])
-        print(Th[6][1])
-        print(Th[6][2])
-        print(Th[6][3])
-        print(Th[6][4])
-        print(Th[6][5])
-        print("....")'''
+        #Select which of the 8 possible solution you want to use
         pts.positions = [Th[7][0], Th[7][1], Th[7][2], Th[7][3], Th[7][4], Th[7][5]]
         pts.time_from_start = rospy.Duration(1.0)
 
