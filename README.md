@@ -14,10 +14,21 @@ After downloading all the files, build using catkin build
   catkin build
   source devel/setup.bash
   ```
+Give execution permission to the spawner scripts
+
+  ```
+  chmod +x spawner/spawner_1.py
+  ```
+
 To launch the gazebo simulation
 
   ```
   roslaunch ur5_gazebo ur5_lego.launch
+  ```
+You can launch specific scenarios
+
+  ```
+  roslaunch ur5_gazebo ur5_world_1.launch
   ```
 Unpause the simulation. You can send commands to the joints
 
