@@ -1,7 +1,7 @@
 # Download
 
   ```
-  git clone -b base-version https://github.com/RaffaeleCrocco/fundamental-of-robotic.git
+  git clone https://github.com/RaffaeleCrocco/fundamental-of-robotic.git
   ```
 
 # Installation
