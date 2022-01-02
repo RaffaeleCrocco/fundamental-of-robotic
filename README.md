@@ -20,12 +20,7 @@ Give execution permission to the spawner scripts
   chmod +x spawner/spawner_1.py
   ```
 
-To launch a more generic gazebo simulation
-
-  ```
-  roslaunch ur5_gazebo ur5_lego.launch
-  ```
-Or you can launch specific scenarios
+You can launch specific scenarios
 
   ```
   roslaunch ur5_gazebo ur5_world_1.launch
