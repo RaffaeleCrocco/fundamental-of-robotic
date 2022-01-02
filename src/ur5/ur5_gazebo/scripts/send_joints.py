@@ -17,32 +17,32 @@ def ur5Direct(Th):
     T10f = lambda th1: np.array([[np.cos(th1), -np.sin(th1), 0, 0],
                         [np.sin(th1), np.cos(th1), 0, 0],
                         [0, 0, 1, D[0]],
-                        [0, 0, 0, 1]], dtype='float')
+                        [0, 0, 0, 1]])
 
     T21f = lambda th2: np.array([[np.cos(th2), -np.sin(th2), 0, 0],
                         [0, 0, -1, 0],
                         [np.sin(th2), np.cos(th2), 0, 0],
-                        [0, 0, 0, 1]], dtype='float')
+                        [0, 0, 0, 1]])
 
     T32f = lambda th3: np.array([[np.cos(th3), -np.sin(th3), 0, A[1]],
                         [np.sin(th3), np.cos(th3), 0, 0],
                         [0, 0, 1, D[2]],
-                        [0, 0, 0, 1]], dtype='float')
+                        [0, 0, 0, 1]])
 
     T43f = lambda th4: np.array([[np.cos(th4), -np.sin(th4), 0, A[2]],
                         [np.sin(th4), np.cos(th4), 0, 0],
                         [0, 0, 1, D[3]],
-                        [0, 0, 0, 1]], dtype='float')
+                        [0, 0, 0, 1]])
 
     T54f = lambda th5: np.array([[np.cos(th5), -np.sin(th5), 0, 0],
                         [0, 0, -1, -D[4]],
                         [np.sin(th5), np.cos(th5), 0, 0],
-                        [0, 0, 0, 1]], dtype='float')
+                        [0, 0, 0, 1]])
 
     T65f = lambda th6: np.array([[np.cos(th6), -np.sin(th6), 0, 0],
                         [0, 0, 1, D[5]],
                         [-np.sin(th6), -np.cos(th6), 0, 0],
-                        [0, 0, 0, 1]], dtype='float')
+                        [0, 0, 0, 1]])
     
     T10m = T10f(Th[0])
     T21m = T21f(Th[1])
@@ -71,32 +71,32 @@ def ur5Inverse(p60, R60):
     T10f = lambda th1: np.array([[np.cos(th1), -np.sin(th1), 0, 0],
                         [np.sin(th1), np.cos(th1), 0, 0],
                         [0, 0, 1, D[0]],
-                        [0, 0, 0, 1]], dtype='float')
+                        [0, 0, 0, 1]])
     
     T21f = lambda th2: np.array([[np.cos(th2), -np.sin(th2), 0, 0],
                         [0, 0, -1, 0],
                         [np.sin(th2), np.cos(th2), 0, 0],
-                        [0, 0, 0, 1]], dtype='float')
+                        [0, 0, 0, 1]])
 
     T32f = lambda th3: np.array([[np.cos(th3), -np.sin(th3), 0, A[1]],
                         [np.sin(th3), np.cos(th3), 0, 0],
                         [0, 0, 1, D[2]],
-                        [0, 0, 0, 1]], dtype='float')
+                        [0, 0, 0, 1]])
 
     T43f = lambda th4: np.array([[np.cos(th4), -np.sin(th4), 0, A[2]],
                         [np.sin(th4), np.cos(th4), 0, 0],
                         [0, 0, 1, D[3]],
-                        [0, 0, 0, 1]], dtype='float')
+                        [0, 0, 0, 1]])
 
     T54f = lambda th5: np.array([[np.cos(th5), -np.sin(th5), 0, 0],
                         [0, 0, -1, -D[4]],
                         [np.sin(th5), np.cos(th5), 0, 0],
-                        [0, 0, 0, 1]], dtype='float')
+                        [0, 0, 0, 1]])
 
     T65f = lambda th6: np.array([[np.cos(th6), -np.sin(th6), 0, 0],
                         [0, 0, 1, D[5]],
                         [-np.sin(th6), -np.cos(th6), 0, 0],
-                        [0, 0, 0, 1]], dtype='float')
+                        [0, 0, 0, 1]])
     
     # Finding Th1
     x = [0, 0, -D[5], 1]
@@ -220,7 +220,7 @@ def rotm2eul(R):
         y = np.arctan2(-R[2,0], sy)
         z = 0
     
-    return np.array([z, y, x])
+    return np.array([x, y, z])
 
 def eul2rotm(theta):
     Rx = np.array([[1,   0,  0],
@@ -259,7 +259,7 @@ def main():
     phie0 = np.transpose(rotm2eul(Re))
 
     #Final position of end effector
-    xef = np.array([0.5, 0.4, 0.4]) 
+    xef = np.array([-0.5, -0.2, 0.6]) 
     xef = np.transpose(xef)
 
     #Final orientation of end effector
@@ -276,23 +276,12 @@ def main():
         phi = np.transpose(phi)
         Th = ur5Inverse(x, rot.from_euler('ZYX', [phi[0], phi[1], phi[2]]).as_dcm())
 
-        #xe = [0.5, 0.5, 0.8]
-        #xe = np.transpose(xe)
-        #eye = [[1,0,0], [0,1,0], [0,0,1]]
-        #Th = ur5Inverse(xe, eye)
-
         traj.header.stamp = rospy.Time.now()
         pts = JointTrajectoryPoint()
 
         #pts.positions = [0, -1.5, 1.0, 0, 0, 0]
-        '''print(Th[6][0])
-        print(Th[6][1])
-        print(Th[6][2])
-        print(Th[6][3])
-        print(Th[6][4])
-        print(Th[6][5])
-        print("....")'''
-        pts.positions = [Th[7][0], Th[7][1], Th[7][2], Th[7][3], Th[7][4], Th[7][5]]
+        #pts.positions = [Th[7][0], Th[7][1], Th[7][2], Th[7][3], Th[7][4], Th[7][5]]
+        pts.positions = [Th[6][0], Th[6][1], Th[6][2], Th[6][3], Th[6][4], Th[6][5]]
         pts.time_from_start = rospy.Duration(1.0)
 
         # Set the points to the trajectory
