@@ -2,6 +2,17 @@
 <sdf version="1.4">
     <model name="lego_5">
         <link name="link">
+            <inertial>
+                <mass>0.00891495</mass>
+                <inertia>
+                    <ixx>5.98e-04</ixx>
+                    <ixy>0.0</ixy>
+                    <ixz>-0.0</ixz>
+                    <iyy>2.35e-04</iyy>
+                    <iyz>-0.0</iyz>
+                    <izz>5.01e-04</izz>
+                </inertia>
+            </inertial>
             <origin pose="0 0 0 0 0 0"/>
             <collision name="collision">
                 <geometry>
