@@ -30,7 +30,13 @@ Or you can launch specific scenarios
   ```
   roslaunch ur5_gazebo ur5_world_1.launch
   ```
-Unpause the simulation. You can send commands to the joints
+Unpause the simulation. You can spawn random legos in random position using the spawner script
+
+  ```
+  ./spawner/spawner_1.py
+  ```
+
+You can send commands to the joints
 
   ```
   rosrun ur5_gazebo send_joint.py
