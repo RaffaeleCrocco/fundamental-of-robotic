@@ -35,10 +35,6 @@
       <pose>0 0 0 0 0 0</pose>
     </include>
 
-    <!-- A gazebo links attacher -->
-    <!-- <plugin name="ros_link_attacher_plugin" -->
-    <!--         filename="libgazebo_ros_link_attacher.so"/> -->
-
     <!-- The robot base -->
     <model name="ur5_base">
       <include>
@@ -47,9 +43,7 @@
       </include>
     </model>
 
-    <!-- Table -->
-    <!-- Table top is at (x,y,z) = (0.7, 0, 0.775) -->
-    <!-- Table top size is 0.9x0.9 -->
+    <!-- Table where legos spawn -->
     <model name="start_table">
       <static>true</static>
       <include>
@@ -58,18 +52,20 @@
       </include>
     </model>
 
+    <!-- Table where legos have to go -->
     <model name="end_table">
       <include>
-        <uri>model://end_table</uri>
-        <pose>0 -0.8 0 0 0 0</pose>
+        <uri>model://cafe_table</uri>
+        <pose>0 -0.9 0 0 0 0</pose>
       </include>
     </model>
 
+    <!-- Kinect camera used for detection -->
     <model name="kinect_camera">
       <static>true</static>
       <include>
         <uri>model://kinect</uri>
-        <pose>0.6 0 1.8 0 1.5 0</pose>
+        <pose>0.6 0 1.7 0 1.5 0</pose>
       </include>
     </model>
 
