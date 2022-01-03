@@ -260,6 +260,8 @@ def main():
 
     #Final position of end effector
     xef = np.array([-0.5, -0.2, 0.6]) 
+    #Temporary fix for not centered gripper
+    xef[1] += 0.02 
     xef = np.transpose(xef)
 
     #Final orientation of end effector
