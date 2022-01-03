@@ -274,7 +274,7 @@ def main():
         x = xe(1)
         phi = phie(1)
         phi = np.transpose(phi)
-        Th = ur5Inverse(x, rot.from_euler('ZYX', [phi[0], phi[1], phi[2]]).as_dcm())
+        Th = ur5Inverse(x, rot.from_euler('ZYX', [phi[0], phi[1], phi[2]]).as_dcm()) # If not running use .as_matrix() instead of .as_dcm()
 
         traj.header.stamp = rospy.Time.now()
         pts = JointTrajectoryPoint()
