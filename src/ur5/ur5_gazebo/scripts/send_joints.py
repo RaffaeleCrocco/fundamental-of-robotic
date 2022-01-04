@@ -259,13 +259,12 @@ def main():
     phie0 = np.transpose(rotm2eul(Re))
 
     #Final position of end effector
-    xef = np.array([-0.5, -0.2, 0.6]) 
-    #Temporary fix for not centered gripper
-    xef[1] += 0.02 
+    xef = np.array([0.73, 0.18, 0.5])
+    xef[1] -= 0.02
     xef = np.transpose(xef)
 
     #Final orientation of end effector
-    phief = np.array([np.pi/2, np.pi, 0]) 
+    phief = np.array([np.pi/2, np.pi, 0]) #[np.pi, np.pi, 0] for vertical gripper
     phief = np.transpose(phief)
 
     xe = lambda t: np.dot(t,xef) + np.dot((1-t),xe0)
@@ -276,7 +275,7 @@ def main():
         x = xe(1)
         phi = phie(1)
         phi = np.transpose(phi)
-        Th = ur5Inverse(x, rot.from_euler('ZYX', [phi[0], phi[1], phi[2]]).as_dcm()) # If not running use .as_matrix() instead of .as_dcm()
+        Th = ur5Inverse(x, rot.from_euler('ZYX', [phi[0], phi[1], phi[2]]).as_dcm())
 
         traj.header.stamp = rospy.Time.now()
         pts = JointTrajectoryPoint()
