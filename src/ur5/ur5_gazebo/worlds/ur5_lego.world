@@ -54,7 +54,7 @@
       <static>true</static>
       <include>
         <uri>model://cafe_table</uri>
-        <pose>0.7 0 0 0 0 0</pose>
+        <pose>-0.7 0 0 0 0 0</pose>
       </include>
     </model>
 
@@ -69,77 +69,77 @@
       <static>true</static>
       <include>
         <uri>model://kinect</uri>
-        <pose>0.6 0 1.8 0 1.5 0</pose>
+        <pose>-0.6 0 1.7 0 1.5 0</pose>
       </include>
     </model>
 
     <model name="lego_1">
       <include>
         <uri>model://lego_1</uri>
-        <pose>0.44 0.32 0.775 0 0 -0.15</pose>
+        <pose>-0.44 0.32 0.775 0 0 -0.15</pose>
       </include>
     </model>
 
     <model name="lego_2">
       <include>
         <uri>model://lego_2</uri>
-        <pose>0.4 0.05 0.775 0 0 1.28</pose>
+        <pose>-0.4 0.05 0.775 0 0 1.28</pose>
       </include>
     </model>
 
     <model name="lego_3">
       <include>
         <uri>model://lego_3</uri>
-        <pose>0.36 -0.3 0.775 0 0 2.58</pose>
+        <pose>-0.36 -0.3 0.775 0 0 2.58</pose>
       </include>
     </model>
 
     <model name="lego_4">
       <include>
         <uri>model://lego_4</uri>
-        <pose>0.5 -0.4 0.775 0 0 -2.25</pose>
+        <pose>-0.5 -0.4 0.775 0 0 -2.25</pose>
       </include>
     </model>
 
     <model name="lego_5">
       <include>
         <uri>model://lego_5</uri>
-        <pose>0.75 0.2 0.775 0 0 -2.12</pose>
+        <pose>-0.75 0.2 0.775 0 0 -2.12</pose>
       </include>
     </model>
 
     <model name="lego_6">
       <include>
         <uri>model://lego_6</uri>
-        <pose>0.54 -0.35 0.775 0 0 -3.4</pose>
+        <pose>-0.54 -0.35 0.775 0 0 -3.4</pose>
       </include>
     </model>
 
     <model name="lego_7">
       <include>
         <uri>model://lego_7</uri>
-        <pose>0.33 0.34 0.775 0 0 1.52</pose>
+        <pose>-0.33 0.34 0.775 0 0 1.52</pose>
       </include>
     </model>
 
     <model name="lego_8">
       <include>
         <uri>model://lego_8</uri>
-        <pose>0.32 -0.17 0.775 0 0 0.67</pose>
+        <pose>-0.32 -0.17 0.775 0 0 0.67</pose>
       </include>
     </model>
 
     <model name="lego_9">
       <include>
         <uri>model://lego_9</uri>
-        <pose>0.74 -0.35 0.775 0 0 3.2</pose>
+        <pose>-0.74 -0.35 0.775 0 0 3.2</pose>
       </include>
     </model>
 
     <model name="lego_10">
       <include>
         <uri>model://lego_10</uri>
-        <pose>0.64 0.27 0.775 0 0 -0.4</pose>
+        <pose>-0.64 0.27 0.775 0 0 -0.4</pose>
       </include>
     </model>
     
@@ -147,13 +147,13 @@
     <model name="lego_11">
       <include>
         <uri>model://lego_11</uri>
-        <pose>0.7 0.0 0.775 0 0 -0.1</pose>
+        <pose>-0.7 0.0 0.775 0 0 -0.1</pose>
       </include>
     </model>
 
     <!-- Cubes -->
     <model name="cube1">
-      <pose>0.4 0.0 0.775 0 0 0</pose>
+      <pose>-0.4 0.0 0.775 0 0 0</pose>
       <link name="link">
         <pose>0 0 0.025 0 0 0</pose>
         <inertial>
