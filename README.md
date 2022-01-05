@@ -2,6 +2,9 @@
 
   ```
   git clone https://github.com/RaffaeleCrocco/fundamental-of-robotic.git
+  cd src
+  git clone https://github.com/JenniferBuehler/general-message-pkgs.git
+  git clone https://github.com/JenniferBuehler/gazebo-pkgs.git
   ```
 
 # Installation
@@ -10,6 +13,7 @@ After downloading all the files, build using catkin build
 
   ```
   cd fundamental-of-robotic
+
   source /opt/ros/noetic/setup.bash
   catkin build
   source devel/setup.bash
