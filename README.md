@@ -13,7 +13,6 @@ After downloading all the files, build using catkin build
 
   ```
   cd fundamental-of-robotic
-
   source /opt/ros/noetic/setup.bash
   catkin build
   source devel/setup.bash
