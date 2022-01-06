@@ -51,7 +51,8 @@ def ur5Direct(Th):
     T54m = T54f(Th[4])
     T65m = T65f(Th[5])
 
-    T06 = T10m*T21m*T32m*T43m*T54m*T65m
+    T06 = np.dot(np.dot(np.dot(T10m,T21m),np.dot(T32m,T43m)),np.dot(T54m,T65m))
+    
     pe = T06[0:3,3]
     Re = T06[0:3, 0:3]
 
