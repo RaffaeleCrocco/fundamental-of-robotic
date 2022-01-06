@@ -405,7 +405,7 @@ def main():
     #Final position of end effector
     xef = np.array([0.60, -0.43, 0.5])
     #Final orientation of end effector
-    phief = np.array([np.pi/2, np.pi, 0]) #[np.pi, np.pi, 0] for vertical gripper, [np.pi/2, np.pi, 0] for horizontal gripper]
+    phief = np.array([np.pi/2, np.pi, 0]) #[np.pi, np.pi, 0] for vertical gripper, [np.pi/2, np.pi, 0] for horizontal gripper
 
     gripper_client(0.0)
 
