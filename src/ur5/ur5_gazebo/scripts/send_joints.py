@@ -175,7 +175,7 @@ def moveTo(xef, phief):
     Th = ur5Inverse(x, rot.from_euler('ZYX', [phi[0], phi[1], phi[2]]).as_dcm()) # A seconda da che versioni di scipy: as_dcm() o as_matrix()
     while not rospy.is_shutdown():
 
-        threshold = 0.003
+        threshold = 0.008
         if (current_pos[0]>Th[6][0]-threshold and current_pos[0]<Th[6][0]+threshold) and (current_pos[1]>Th[6][1]-threshold and current_pos[1]<Th[6][1]+threshold) and (current_pos[2]>Th[6][2]-threshold and current_pos[2] < Th[6][2]+threshold) and (current_pos[3]>Th[6][3]-threshold and current_pos[3] < Th[6][3]+threshold) and (current_pos[4]>Th[6][4]-threshold and current_pos[4] < Th[6][4]+threshold) and (current_pos[5]>Th[6][5]-threshold and current_pos[5] < Th[6][5]+threshold):
             break
 
@@ -213,7 +213,7 @@ def main():
     #lego_1: 0.53
 
     #Final position of end effector
-    xef = np.array([0.318, -0.04, 0.5])
+    xef = np.array([0.4, 0.14, 0.5])
     #Final orientation of end effector
     phief = np.array([np.pi/2, np.pi, 0]) #[np.pi, np.pi, 0] for vertical gripper, [np.pi/2, np.pi, 0] for horizontal gripper]
 
@@ -222,8 +222,16 @@ def main():
     #Calculate joint angle matrix
     Th = moveTo(xef, phief)    
 
-    xef = np.array([0.6, 0.125, 0.42])
-    #Th = moveTo(xef, phief)  
+    xef = np.array([0.4, 0.14, 0.42])
+    Th = moveTo(xef, phief)  
+
+    gripper_client(0.53)
+    time.sleep(3)
+
+    xef = np.array([0.3, -0.6, 0.6])
+    Th = moveTo(xef, phief)  
+
+    gripper_client(0.0)
 
 if __name__ == '__main__':
     try:
