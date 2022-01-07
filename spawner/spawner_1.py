@@ -4,7 +4,7 @@ from geometry_msgs.msg import *
 import rospy
 import random
 
-pos = Pose(Point(random.uniform(-0.3, -0.76), random.uniform(-0.45, 0.45), 0.775), Quaternion(0,0,random.uniform(-2.0, 2.0), 0.0))
+pos = Pose(Point(random.uniform(0.3, 0.76), random.uniform(-0.45, 0.45), 0.775), Quaternion(0,0,random.uniform(-2.0, 2.0), 0.0))
 print(pos)
 brick = "lego_"+str(random.randint(1,11))
 print(brick)
