@@ -161,7 +161,8 @@ def moveTo(xef, phief):
     xe0, Re = ur5Direct(TH0)
     phie0 = np.transpose(rotm2eul(Re))
 
-    xef[1] -= 0.02
+    xef[1] -= 0.024
+    xef[0] += 0.01
     xef = np.transpose(xef)
     phief = np.transpose(phief)
 
@@ -209,8 +210,10 @@ def main():
     rospy.init_node('send_joints')
     sub = rospy.Subscriber('/joint_states', JointState, jointState)
     
+    #lego_1: 0.53
+
     #Final position of end effector
-    xef = np.array([0.60, -0.43, 0.5])
+    xef = np.array([0.318, -0.04, 0.5])
     #Final orientation of end effector
     phief = np.array([np.pi/2, np.pi, 0]) #[np.pi, np.pi, 0] for vertical gripper, [np.pi/2, np.pi, 0] for horizontal gripper]
 
@@ -218,6 +221,9 @@ def main():
 
     #Calculate joint angle matrix
     Th = moveTo(xef, phief)    
+
+    xef = np.array([0.6, 0.125, 0.42])
+    #Th = moveTo(xef, phief)  
 
 if __name__ == '__main__':
     try:
