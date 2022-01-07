@@ -23,7 +23,6 @@ Give execution permission to the scripts
   chmod +x spawner/spawner_1.py
   
   chmod +x src/ur5/ur5_gazebo/scripts/send_joints.py
-  chmod +x src/ur5/ur5_gazebo/scripts/send_gripper.py
   ```
 
 You can launch specific scenarios
