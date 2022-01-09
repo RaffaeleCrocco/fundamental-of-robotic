@@ -67,8 +67,8 @@
   <gazebo>
     <gripper name="gazebo_gripper">
       <grasp_check>
-        <attach_steps>1</attach_steps>    <!-- default: 2 -->
-        <detach_steps>1</detach_steps>    <!-- default: 2 -->
+        <attach_steps>2</attach_steps>    <!-- default: 2 -->
+        <detach_steps>2</detach_steps>    <!-- default: 2 -->
         <min_contact_count>3</min_contact_count>
       </grasp_check>
       <gripper_link>robotiq_85_left_finger_tip_link</gripper_link>
