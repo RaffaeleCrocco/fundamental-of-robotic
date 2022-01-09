@@ -162,7 +162,6 @@ def moveTo(xef, phief):
     phie0 = np.transpose(rotm2eul(Re))
 
     xef[1] -= 0.024
-    xef[0] += 0.01
     xef = np.transpose(xef)
     phief = np.transpose(phief)
 
@@ -184,7 +183,7 @@ def moveTo(xef, phief):
 
         #pts.positions = [0, -1.5, 1.0, 0, 0, 0]
         pts.positions = [Th[6][0], Th[6][1], Th[6][2], Th[6][3], Th[6][4], Th[6][5]]
-        pts.time_from_start = rospy.Duration(1.0)
+        pts.time_from_start = rospy.Duration(0.5)
 
         # Set the points to the trajectory
         traj.points = []
