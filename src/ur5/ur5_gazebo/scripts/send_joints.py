@@ -17,9 +17,9 @@ from ur5_direct import ur5Direct
 
 #Contains current joint angles -> updated every time
 #['shoulder_pan_joint', 'shoulder_lift_joint','elbow_joint', 'wrist_1_joint', 'wrist_2_joint','wrist_3_joint']
-current_pos = [0, -1.5, 1.0, 0.0, 0.0, 0]
+current_pos = [0, 1.5, 1.0, 0.0, 0.0, 0]
 # Contains gripper aperture -> 0.0 to 0.8
-current_aperture = [0]       
+current_aperture = [0]
 
 def rotm2eul(R):
     #assert(isRotationMatrix(R))
@@ -55,7 +55,7 @@ def eul2rotm(theta):
     return R
 
 def gripper_client(value):
-    threshold = 0.0011
+    threshold = 0.001
     # Create an action client
     client = actionlib.SimpleActionClient(
         '/gripper_controller/gripper_cmd',  # namespace of the action topics
@@ -73,13 +73,13 @@ def gripper_client(value):
     client.send_goal(goal)
     client.wait_for_result()
 
-    while not (current_aperture[0]>value-threshold and current_aperture[0]<value+threshold):
-        print("waiting for gripper")
+    #while not (current_aperture[0]>value-threshold and current_aperture[0]<value+threshold):
+        #print("")
+    
         
 
 def moveTo(xef, phief):
     pub = rospy.Publisher('/trajectory_controller/command', JointTrajectory, queue_size=10)
-    #rospy.Subscriber('/trajectory_controller/state', String, queue_size=10)
     
     # Create the topic message
     traj = JointTrajectory()
@@ -89,14 +89,26 @@ def moveTo(xef, phief):
 
     rate = rospy.Rate(10)
 
+    #Set current joint angles
     TH0 = current_pos
     xe0, Re = ur5Direct(TH0)
     phie0 = np.transpose(rotm2eul(Re))
 
-    xef[1] -= 0.024
+    #
+    if xef[1] > 0.2:
+        xef[1] -= 0.01
+    else:
+        xef[1] -= 0.025
+
+    if xef[1] > 0.1:
+        xef[0] +=0.02
+    elif xef[1] > -0.1:
+        xef[0] +=0.01
+
     xef = np.transpose(xef)
     phief = np.transpose(phief)
 
+    #Functions that can be used to do point to point
     xe = lambda t: np.dot(t,xef) + np.dot((1-t),xe0)
     phie = lambda t: np.dot(t,phief) + np.dot((1-t),phie0)
 
@@ -106,7 +118,7 @@ def moveTo(xef, phief):
     Th = ur5Inverse(x, rot.from_euler('ZYX', [phi[0], phi[1], phi[2]]).as_dcm()) # A seconda da che versioni di scipy: as_dcm() o as_matrix()
     while not rospy.is_shutdown():
 
-        threshold = 0.006
+        threshold = 0.005
         if (current_pos[0]>Th[6][0]-threshold and current_pos[0]<Th[6][0]+threshold) and (current_pos[1]>Th[6][1]-threshold and current_pos[1]<Th[6][1]+threshold) and (current_pos[2]>Th[6][2]-threshold and current_pos[2] < Th[6][2]+threshold) and (current_pos[3]>Th[6][3]-threshold and current_pos[3] < Th[6][3]+threshold) and (current_pos[4]>Th[6][4]-threshold and current_pos[4] < Th[6][4]+threshold) and (current_pos[5]>Th[6][5]-threshold and current_pos[5] < Th[6][5]+threshold):
             break
 
@@ -114,8 +126,9 @@ def moveTo(xef, phief):
         pts = JointTrajectoryPoint()
 
         #pts.positions = [0, -1.5, 1.0, 0, 0, 0]
-        pts.positions = [Th[6][0], Th[6][1], Th[6][2], Th[6][3], Th[6][4], Th[6][5]]
-        pts.time_from_start = rospy.Duration(0.5)
+        pts.positions = [Th[7][0], Th[6][1], Th[6][2], Th[6][3], Th[6][4], Th[6][5]]
+        #print(pts.positions)
+        pts.time_from_start = rospy.Duration(0.4)
 
         # Set the points to the trajectory
         traj.points = []
@@ -127,8 +140,7 @@ def jointState(msg):
     # ------
     # JointState structure
     # name: -elbow_joint -robotiq_85_left_knuckle_joint -shoulder_lift_joint -shoulder_pan_joint -wrist_1_joint -wrist_2_joint -wrist_3_joint
-
-    #['shoulder_pan_joint', 'shoulder_lift_joint','elbow_joint', 'wrist_1_joint', 'wrist_2_joint','wrist_3_joint']
+    # ------
     current_pos[0] = msg.position[3]
     current_pos[1] = msg.position[2]
     current_pos[2] = msg.position[0]
@@ -141,26 +153,28 @@ def main():
     rospy.init_node('send_joints')
     sub = rospy.Subscriber('/joint_states', JointState, jointState)
     
-    #lego_1: 0.53
+    x=0.375599987615098
+    y= -0.13955389288297085
 
+    
     #Final position of end effector
-    xef = np.array([0.4, 0.14, 0.5])
+    xef = np.array([x, y, 0.35])
     #Final orientation of end effector
-    phief = np.array([np.pi/2, np.pi, 0]) #[np.pi, np.pi, 0] for vertical gripper, [np.pi/2, np.pi, 0] for horizontal gripper]
+    phief = np.array([0.0, np.pi, 0]) #first value from 0.0 to 3.14
 
-    gripper_client(0.0)
+    gripper_client(0.0) 
 
     #Calculate joint angle matrix
-    Th = moveTo(xef, phief)    
+    Th = moveTo(xef, phief) 
 
-    xef = np.array([0.4, 0.14, 0.42])
-    Th = moveTo(xef, phief)  
+    xef = np.array([x, y, 0.22])
+    Th = moveTo(xef, phief) 
 
-    gripper_client(0.53)
-    time.sleep(3)
+    gripper_client(0.51)
+    time.sleep(6)
 
-    xef = np.array([0.3, -0.6, 0.6])
-    Th = moveTo(xef, phief)  
+    xef = np.array([0.3, -0.7, 0.3])
+    Th = moveTo(xef, phief) 
 
     gripper_client(0.0)
 
