@@ -5,7 +5,7 @@
     <static>true</static>
 
     <link name="top_plate">
-      <pose>0 0 0.58 0 0 0</pose>
+      <pose>0 0 0.775 0 0 0</pose>
       <collision name="top_plate_collision">
         <geometry>
           <box>
