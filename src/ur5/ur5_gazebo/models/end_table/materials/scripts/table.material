@@ -12,7 +12,7 @@ material griglia/Image{
       
             texture_unit
             {
-                griglia.png
+                texture griglia.png
             }
         }   
     }
