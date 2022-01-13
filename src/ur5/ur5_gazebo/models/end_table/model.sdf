@@ -26,8 +26,9 @@
         </geometry>
         <material>
           <script>
-            <uri>file://media/materials/scripts/gazebo.material</uri>
-            <name>Gazebo/White</name>
+            <uri>model://end_table/materials/scripts</uri>
+            <uri>model://end_table/materials/textures</uri>
+            <name>griglia/Image</name>
           </script>
         </material>
       </visual>
