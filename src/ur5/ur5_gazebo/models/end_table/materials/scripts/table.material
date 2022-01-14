@@ -1,15 +1,13 @@
-material griglia/Image{
+material grid/Image{
     receive_shadows on
     
     technique
     {
         pass
         {
-        ambient 1 1 1 1.000000
-      diffuse 1 1 1 1.000000
-      specular 0.03 0.03 0.03 1.000000 
-      emissive 0.900000 0.900000 0.900000 1.000000
-      
+        ambient 0.5 0.5 0.5 1.0
+      diffuse 1.0 1.0 1.0 1.0
+      specular 0.0 0.0 0.0 1.0 0.5
             texture_unit
             {
                 texture griglia.png
