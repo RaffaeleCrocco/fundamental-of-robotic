@@ -22,7 +22,10 @@ current_pos = [-0.9, -2, -1.3, 0.0, 0.0, 0]
 # Contains gripper aperture -> 0.0 to 0.8
 #current_aperture = [0]
 
-objectives =[]          # List containing all the objects detected wit hrespective positions and orientations
+objectives = []          # List containing all the objects detected wit hrespective positions and orientations
+
+blocks = np.array([['X1-Y2-Z1', 'X2-Y2-Z2', 'X1-Y3-Z2', 'X1-Y2-Z2', 'X1-Y2-Z2-CHAMFER', 'X1-Y4-Z2', 'X1-Y1-Z2', 'X1-Y2-Z2-TWINFILLET', 'X1-Y3-Z2-FILLET', 'X1-Y4-Z1', 'X2-Y2-Z2-FILLET'],
+                   [0.515,      0.25,       0.515,      0.515,      0.515,              0.515,      0.515,      0.515,                  0.515,              0.515,      0.25]])
 
 def rotm2eul(R):
     #assert(isRotationMatrix(R))
@@ -176,7 +179,7 @@ def main():
         y=float(obj[2])
 
         #Final position of end effector
-        xef = np.array([x, y, 0.25])
+        xef = np.array([x, y, 0.27])
         #Final orientation of end effector
         phief = np.array([float(obj[4]), np.pi, 0]) #first value from 0.0 to 3.14
 
@@ -188,7 +191,7 @@ def main():
         xef = np.array([x, y, 0.225])
         Th = moveTo(xef, phief) 
 
-        gripper_client(0.515)
+        gripper_client(float(blocks[1][int(obj[0])]))
         time.sleep(10)
 
         xef = np.array([x, y, 0.32])
