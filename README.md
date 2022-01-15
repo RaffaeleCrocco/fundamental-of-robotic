@@ -21,6 +21,7 @@ Give execution permission to the scripts
 
   ```
   chmod +x spawner/spawner_1.py
+  chmod +x spawner/spawner_2.py
 
   chmod +x src/ur5/ur5_gazebo/scripts/send_joints.py
   chmod +x src/ur5/ur5_gazebo/scripts/vision.py
@@ -36,10 +37,11 @@ Unpause the simulation. Launch vision script
   ```
   rosrun ur5_gazebo vision.py
   ```
-You can spawn random legos in random position using the spawner script
+You can spawn random legos in random position using the spawner_1 or spawner_2 script
 
   ```
-  ./spawner/spawner_1.py
+  ./spawner/spawner_1.py # Spawn only one random block at the time
+  ./spawner/spawner_2.py # Spawn all 11 blocks at the same time
   ```
 
 After you spawned lego blocks you can tell the ur5 to pick them up
