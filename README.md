@@ -21,8 +21,9 @@ Give execution permission to the scripts
 
   ```
   chmod +x spawner/spawner_1.py
-  
+
   chmod +x src/ur5/ur5_gazebo/scripts/send_joints.py
+  chmod +x src/ur5/ur5_gazebo/scripts/vision.py
   ```
 
 You can launch specific scenarios
@@ -30,26 +31,19 @@ You can launch specific scenarios
   ```
   roslaunch ur5_gazebo ur5_world_1.launch
   ```
-Unpause the simulation. You can spawn random legos in random position using the spawner script
+Unpause the simulation. Launch vision script
+
+  ```
+  rosrun ur5_gazebo vision.py
+  ```
+You can spawn random legos in random position using the spawner script
 
   ```
   ./spawner/spawner_1.py
   ```
 
-You can send commands to the joints
+You can tell the ur5 to pick up the legos
 
   ```
   rosrun ur5_gazebo send_joint.py
   ```
-  
-You can send commands to the gripper (value between 0.0 and 0.8)
-
-  ```
-  rosrun ur5_gazebo send_gripper.py --value 0.5
-  ```
-You can visualize the camera feed
-
- ```
- rqt
- ```
-Go to plugins -> visualization -> image view and then select /camera/color/image_raw or /camera/depth/image_raw
