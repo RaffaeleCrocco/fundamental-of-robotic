@@ -26,7 +26,7 @@ Give execution permission to the scripts
   chmod +x src/ur5/ur5_gazebo/scripts/vision.py
   ```
 
-You can launch specific scenarios
+Launch the gazebo world
 
   ```
   roslaunch ur5_gazebo ur5_world_1.launch
