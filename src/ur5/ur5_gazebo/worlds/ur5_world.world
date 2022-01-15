@@ -2,7 +2,7 @@
 
 <sdf version="1.6">
 
-  <world name="ur5_world_1">
+  <world name="ur5_world">
     
     <gui>
       <camera name="user_camera">
