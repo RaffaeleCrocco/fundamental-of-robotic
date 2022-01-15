@@ -4,7 +4,7 @@
   git clone git@github.com:RaffaeleCrocco/fundamental-of-robotic.git
   cd src
   git clone https://github.com/JenniferBuehler/gazebo-pkgs.git
-  git clone https://github.com/JenniferBuehler/gazebo-pkgs.git
+  git clone https://github.com/JenniferBuehler/general-message-pkgs.git
   ```
 
 # Installation
