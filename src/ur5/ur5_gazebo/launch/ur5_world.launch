@@ -8,7 +8,7 @@
   
   <!-- Startup simulated world -->
   <include file="$(find ur5_gazebo)/launch/ur5_setup.launch">
-    <arg name="world_name"  value="$(find ur5_gazebo)/worlds/ur5_world_1.world"/>
+    <arg name="world_name"  value="$(find ur5_gazebo)/worlds/ur5_world.world"/>
     <arg name="paused"      value="$(arg paused)"/>
     <arg name="debug"       value="$(arg debug)"/>
     <arg name="gui"         value="$(arg gui)"/>
