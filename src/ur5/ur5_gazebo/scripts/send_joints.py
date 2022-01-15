@@ -194,7 +194,7 @@ def main():
         gripper_client(float(blocks[1][int(obj[0])]))
         time.sleep(10)
 
-        xef = np.array([x, y, 0.32])
+        xef = np.array([x, y, 0.35])
         Th = moveTo(xef, phief) 
 
         xef = np.array([0.3, -0.6, 0.25])
@@ -202,7 +202,7 @@ def main():
 
         gripper_client(0.0)
 
-        time.sleep(1)
+        time.sleep(1.5)
 
         xef = np.array([0.3, -0.6, 0.3])
         Th = moveTo(xef, phief)
