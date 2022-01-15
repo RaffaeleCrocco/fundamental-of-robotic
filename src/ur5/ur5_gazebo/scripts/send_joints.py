@@ -115,7 +115,7 @@ def moveTo(xef, phief):
     x = xe(1)
     phi = phie(1)
     phi = np.transpose(phi)
-    Th = ur5Inverse(x, rot.from_euler('ZYX', [phi[0], phi[1], phi[2]]).as_matrix()) # A seconda da che versioni di scipy: as_dcm() o as_matrix()
+    Th = ur5Inverse(x, rot.from_euler('ZYX', [phi[0], phi[1], phi[2]]).as_matrix())
     while not rospy.is_shutdown():
 
         threshold = 0.008
