@@ -141,7 +141,4 @@ def ur5Inverse(p60, R60):
           [th1_2, th2_7, th3_7, th4_7, th5_3, th6_3],
           [th1_2, th2_8, th3_8, th4_8, th5_4, th6_4]]
 
-    print("Th:")
-    print(Th)
-
     return Th
