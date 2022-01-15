@@ -6,6 +6,7 @@ from trajectory_msgs.msg import JointTrajectoryPoint
 from sensor_msgs.msg import JointState
 import actionlib
 import control_msgs.msg
+from std_msgs.msg import String
 import rospy
 import numpy as np
 import time
@@ -17,9 +18,11 @@ from ur5_direct import ur5Direct
 
 #Contains current joint angles -> updated every time
 #['shoulder_pan_joint', 'shoulder_lift_joint','elbow_joint', 'wrist_1_joint', 'wrist_2_joint','wrist_3_joint']
-current_pos = [0, 1.5, 1.0, 0.0, 0.0, 0]
+current_pos = [-0.9, -2, -1.3, 0.0, 0.0, 0]
 # Contains gripper aperture -> 0.0 to 0.8
-current_aperture = [0]
+#current_aperture = [0]
+
+objectives =[]          # List containing all the objects detected wit hrespective positions and orientations
 
 def rotm2eul(R):
     #assert(isRotationMatrix(R))
@@ -55,7 +58,6 @@ def eul2rotm(theta):
     return R
 
 def gripper_client(value):
-    threshold = 0.001
     # Create an action client
     client = actionlib.SimpleActionClient(
         '/gripper_controller/gripper_cmd',  # namespace of the action topics
@@ -71,12 +73,7 @@ def gripper_client(value):
     goal.command.max_effort = -1.0  # Do not limit the effort
 
     client.send_goal(goal)
-    client.wait_for_result()
-
-    #while not (current_aperture[0]>value-threshold and current_aperture[0]<value+threshold):
-        #print("")
-    
-        
+    client.wait_for_result() 
 
 def moveTo(xef, phief):
     pub = rospy.Publisher('/trajectory_controller/command', JointTrajectory, queue_size=10)
@@ -115,10 +112,10 @@ def moveTo(xef, phief):
     x = xe(1)
     phi = phie(1)
     phi = np.transpose(phi)
-    Th = ur5Inverse(x, rot.from_euler('ZYX', [phi[0], phi[1], phi[2]]).as_dcm()) # A seconda da che versioni di scipy: as_dcm() o as_matrix()
+    Th = ur5Inverse(x, rot.from_euler('ZYX', [phi[0], phi[1], phi[2]]).as_matrix()) # A seconda da che versioni di scipy: as_dcm() o as_matrix()
     while not rospy.is_shutdown():
 
-        threshold = 0.005
+        threshold = 0.008
         if (current_pos[0]>Th[6][0]-threshold and current_pos[0]<Th[6][0]+threshold) and (current_pos[1]>Th[6][1]-threshold and current_pos[1]<Th[6][1]+threshold) and (current_pos[2]>Th[6][2]-threshold and current_pos[2] < Th[6][2]+threshold) and (current_pos[3]>Th[6][3]-threshold and current_pos[3] < Th[6][3]+threshold) and (current_pos[4]>Th[6][4]-threshold and current_pos[4] < Th[6][4]+threshold) and (current_pos[5]>Th[6][5]-threshold and current_pos[5] < Th[6][5]+threshold):
             break
 
@@ -126,9 +123,8 @@ def moveTo(xef, phief):
         pts = JointTrajectoryPoint()
 
         #pts.positions = [0, -1.5, 1.0, 0, 0, 0]
-        pts.positions = [Th[7][0], Th[6][1], Th[6][2], Th[6][3], Th[6][4], Th[6][5]]
-        #print(pts.positions)
-        pts.time_from_start = rospy.Duration(0.4)
+        pts.positions = [Th[6][0], Th[6][1], Th[6][2], Th[6][3], Th[6][4], Th[6][5]]
+        pts.time_from_start = rospy.Duration(0.2)
 
         # Set the points to the trajectory
         traj.points = []
@@ -147,36 +143,72 @@ def jointState(msg):
     current_pos[3] = msg.position[4]
     current_pos[4] = msg.position[5]
     current_pos[5] = msg.position[6]
-    current_aperture[0] = msg.position[1]
+    #current_aperture[0] = msg.position[1]
+
+def yolovision(msg):
+    x = str(msg)
+    if (x[1] != "''") and (not objectives):                  # Checking if there is at least one lego block
+        x = x.replace("\\", "")         # Remove \ character
+        x = x.replace('data: "', "")    # Remove first cell
+        x = x.replace('"', "")          # Remove " character
+        x = x.split('n')                # Split string where letter n is found
+        x.pop()                         # Remove last cell
+
+        j=0
+        for i in x:
+            x[j] = x[j].replace('\n', "")
+            objectives.append(x[j])
+            j += 1
+
 
 def main():
     rospy.init_node('send_joints')
     sub = rospy.Subscriber('/joint_states', JointState, jointState)
+    yolo = rospy.Subscriber('/yolo', String, yolovision)
     
-    x=0.375599987615098
-    y= -0.13955389288297085
+    time.sleep(2)
 
-    
-    #Final position of end effector
-    xef = np.array([x, y, 0.35])
-    #Final orientation of end effector
-    phief = np.array([0.0, np.pi, 0]) #first value from 0.0 to 3.14
+    start_time = time.time()
 
-    gripper_client(0.0) 
+    for i in range (0, len(objectives)):
+        obj = objectives[i].split()
+        x=float(obj[1])
+        y=float(obj[2])
 
-    #Calculate joint angle matrix
-    Th = moveTo(xef, phief) 
+        #Final position of end effector
+        xef = np.array([x, y, 0.25])
+        #Final orientation of end effector
+        phief = np.array([float(obj[4]), np.pi, 0]) #first value from 0.0 to 3.14
 
-    xef = np.array([x, y, 0.22])
-    Th = moveTo(xef, phief) 
+        gripper_client(0.0) 
 
-    gripper_client(0.51)
-    time.sleep(6)
+        #Calculate joint angle matrix
+        Th = moveTo(xef, phief)
 
-    xef = np.array([0.3, -0.7, 0.3])
-    Th = moveTo(xef, phief) 
+        xef = np.array([x, y, 0.225])
+        Th = moveTo(xef, phief) 
 
-    gripper_client(0.0)
+        gripper_client(0.515)
+        time.sleep(10)
+
+        xef = np.array([x, y, 0.32])
+        Th = moveTo(xef, phief) 
+
+        xef = np.array([0.3, -0.6, 0.25])
+        Th = moveTo(xef, phief) 
+
+        gripper_client(0.0)
+
+        time.sleep(1)
+
+        xef = np.array([0.3, -0.6, 0.3])
+        Th = moveTo(xef, phief)
+
+    end_time = time.time()
+    delta_time = end_time-start_time
+    print("KPI 1-2/2-1:")
+    print(delta_time)
+
 
 if __name__ == '__main__':
     try:
