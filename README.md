@@ -29,7 +29,7 @@ Give execution permission to the scripts
 Launch the gazebo world
 
   ```
-  roslaunch ur5_gazebo ur5_world_1.launch
+  roslaunch ur5_gazebo ur5_world.launch
   ```
 Unpause the simulation. Launch vision script
 
@@ -42,7 +42,7 @@ You can spawn random legos in random position using the spawner script
   ./spawner/spawner_1.py
   ```
 
-You can tell the ur5 to pick up the legos
+After you spawned lego blocks you can tell the ur5 to pick up the legos
 
   ```
   rosrun ur5_gazebo send_joint.py
