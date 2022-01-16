@@ -19,14 +19,13 @@ from ur5_direct import ur5Direct
 #Contains current joint angles -> updated every time
 #['shoulder_pan_joint', 'shoulder_lift_joint','elbow_joint', 'wrist_1_joint', 'wrist_2_joint','wrist_3_joint']
 current_pos = [-0.9, -2, -1.3, 0.0, 0.0, 0]
-# Contains gripper aperture -> 0.0 to 0.8
-#current_aperture = [0]
 
-objectives = []          # List containing all the objects detected wit hrespective positions and orientations
+objectives = []          # List containing all the objects detected with respective positions and orientations
 
 blocks = np.array([['X1-Y2-Z1', 'X2-Y2-Z2', 'X1-Y3-Z2', 'X1-Y2-Z2', 'X1-Y2-Z2-CHAMFER', 'X1-Y4-Z2', 'X1-Y1-Z2', 'X1-Y2-Z2-TWINFILLET', 'X1-Y3-Z2-FILLET', 'X1-Y4-Z1', 'X2-Y2-Z2-FILLET'],
-                   [0.515,      0.25,       0.515,      0.515,      0.515,              0.515,      0.515,      0.515,                  0.515,              0.515,      0.25]])
+                   [0.515,      0.25,       0.515,      0.53,      0.515,              0.515,      0.515,      0.515,                  0.515,              0.515,      0.25]])
 
+# Rotation matrix to euler angles function
 def rotm2eul(R):
     #assert(isRotationMatrix(R))
 
@@ -44,6 +43,7 @@ def rotm2eul(R):
     
     return np.array([z, y, x])
 
+# Euler function to rotation matrix function
 def eul2rotm(theta):
     Rx = np.array([[1,   0,  0],
                   [0,   math.cos(theta[0]), -math.sin(theta[0])],
@@ -60,6 +60,7 @@ def eul2rotm(theta):
     R = np.dot(Rz, np.dot(Ry, Rx))
     return R
 
+# Controls grippers aperture
 def gripper_client(value):
     # Create an action client
     client = actionlib.SimpleActionClient(
@@ -78,6 +79,7 @@ def gripper_client(value):
     client.send_goal(goal)
     client.wait_for_result() 
 
+# Function used to move ur5 arm
 def moveTo(xef, phief):
     pub = rospy.Publisher('/trajectory_controller/command', JointTrajectory, queue_size=10)
     
@@ -94,7 +96,7 @@ def moveTo(xef, phief):
     xe0, Re = ur5Direct(TH0)
     phie0 = np.transpose(rotm2eul(Re))
 
-    #
+    # Small position fixes for arm
     if xef[1] > 0.2:
         xef[1] -= 0.01
     else:
@@ -112,12 +114,13 @@ def moveTo(xef, phief):
     xe = lambda t: np.dot(t,xef) + np.dot((1-t),xe0)
     phie = lambda t: np.dot(t,phief) + np.dot((1-t),phie0)
 
-    x = xe(1)
+    x = xe(1) #Using only one point -> final position
     phi = phie(1)
     phi = np.transpose(phi)
     Th = ur5Inverse(x, rot.from_euler('ZYX', [phi[0], phi[1], phi[2]]).as_matrix())
     while not rospy.is_shutdown():
 
+        # Check if the arm is in close range, threshold of wanted position
         threshold = 0.008
         if (current_pos[0]>Th[6][0]-threshold and current_pos[0]<Th[6][0]+threshold) and (current_pos[1]>Th[6][1]-threshold and current_pos[1]<Th[6][1]+threshold) and (current_pos[2]>Th[6][2]-threshold and current_pos[2] < Th[6][2]+threshold) and (current_pos[3]>Th[6][3]-threshold and current_pos[3] < Th[6][3]+threshold) and (current_pos[4]>Th[6][4]-threshold and current_pos[4] < Th[6][4]+threshold) and (current_pos[5]>Th[6][5]-threshold and current_pos[5] < Th[6][5]+threshold):
             break
@@ -125,37 +128,35 @@ def moveTo(xef, phief):
         traj.header.stamp = rospy.Time.now()
         pts = JointTrajectoryPoint()
 
-        #pts.positions = [0, -1.5, 1.0, 0, 0, 0]
         pts.positions = [Th[6][0], Th[6][1], Th[6][2], Th[6][3], Th[6][4], Th[6][5]]
         pts.time_from_start = rospy.Duration(0.2)
 
         # Set the points to the trajectory
         traj.points = []
         traj.points.append(pts)
-        # Publish the message
+        # Publish the message to the topic
         pub.publish(traj)
 
+# Function used for reading msg arriving from joint_states topic
 def jointState(msg):
-    # ------
-    # JointState structure
+    # JointState structure:
     # name: -elbow_joint -robotiq_85_left_knuckle_joint -shoulder_lift_joint -shoulder_pan_joint -wrist_1_joint -wrist_2_joint -wrist_3_joint
-    # ------
     current_pos[0] = msg.position[3]
     current_pos[1] = msg.position[2]
     current_pos[2] = msg.position[0]
     current_pos[3] = msg.position[4]
     current_pos[4] = msg.position[5]
     current_pos[5] = msg.position[6]
-    #current_aperture[0] = msg.position[1]
 
+# Function used for reading msgs arriving from yolo topic, giving position and orientation of all blocks detected
 def yolovision(msg):
     x = str(msg)
-    if (x[1] != "''") and (not objectives):                  # Checking if there is at least one lego block
-        x = x.replace("\\", "")         # Remove \ character
-        x = x.replace('data: "', "")    # Remove first cell
-        x = x.replace('"', "")          # Remove " character
-        x = x.split('n')                # Split string where letter n is found
-        x.pop()                         # Remove last cell
+    if (x[1] != "''") and (not objectives):                 # Checking if there is at least one lego block
+        x = x.replace("\\", "")                             # Remove \ character
+        x = x.replace('data: "', "")                        # Remove first cell
+        x = x.replace('"', "")                              # Remove " character
+        x = x.split('n')                                    # Split string where letter n is found
+        x.pop()                                             # Remove last cell
 
         j=0
         for i in x:
@@ -169,10 +170,12 @@ def main():
     sub = rospy.Subscriber('/joint_states', JointState, jointState)
     yolo = rospy.Subscriber('/yolo', String, yolovision)
     
-    time.sleep(2)
-
+    # wait that main node received position from vision script
+    time.sleep(1.5)
+    # Start timer to see how much time it takes to pick up blocks   
     start_time = time.time()
 
+    # Start picking up the blocks detected and put in objective list
     for i in range (0, len(objectives)):
         obj = objectives[i].split()
         x=float(obj[1])
