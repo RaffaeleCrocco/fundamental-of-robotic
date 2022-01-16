@@ -23,7 +23,7 @@ current_pos = [-0.9, -2, -1.3, 0.0, 0.0, 0]
 objectives = []          # List containing all the objects detected with respective positions and orientations
 
 blocks = np.array([['X1-Y2-Z1', 'X2-Y2-Z2', 'X1-Y3-Z2', 'X1-Y2-Z2', 'X1-Y2-Z2-CHAMFER', 'X1-Y4-Z2', 'X1-Y1-Z2', 'X1-Y2-Z2-TWINFILLET', 'X1-Y3-Z2-FILLET', 'X1-Y4-Z1', 'X2-Y2-Z2-FILLET'],
-                   [0.515,      0.25,       0.515,      0.53,      0.515,              0.515,      0.515,      0.515,                  0.515,              0.515,      0.25]])
+                   [0.515,      0.25,       0.515,      0.515,      0.515,              0.515,      0.515,      0.515,                  0.515,              0.515,      0.25]])
 
 # Rotation matrix to euler angles function
 def rotm2eul(R):
@@ -80,9 +80,7 @@ def gripper_client(value):
     client.wait_for_result() 
 
 # Function used to move ur5 arm
-def moveTo(xef, phief):
-    pub = rospy.Publisher('/trajectory_controller/command', JointTrajectory, queue_size=10)
-    
+def moveTo(xef, phief, pub, threshold):
     # Create the topic message
     traj = JointTrajectory()
     traj.header = Header()
@@ -121,7 +119,7 @@ def moveTo(xef, phief):
     while not rospy.is_shutdown():
 
         # Check if the arm is in close range, threshold of wanted position
-        threshold = 0.008
+        #threshold = 0.008
         if (current_pos[0]>Th[6][0]-threshold and current_pos[0]<Th[6][0]+threshold) and (current_pos[1]>Th[6][1]-threshold and current_pos[1]<Th[6][1]+threshold) and (current_pos[2]>Th[6][2]-threshold and current_pos[2] < Th[6][2]+threshold) and (current_pos[3]>Th[6][3]-threshold and current_pos[3] < Th[6][3]+threshold) and (current_pos[4]>Th[6][4]-threshold and current_pos[4] < Th[6][4]+threshold) and (current_pos[5]>Th[6][5]-threshold and current_pos[5] < Th[6][5]+threshold):
             break
 
@@ -167,6 +165,7 @@ def yolovision(msg):
 
 def main():
     rospy.init_node('send_joints')
+    pub = rospy.Publisher('/trajectory_controller/command', JointTrajectory, queue_size=10)
     sub = rospy.Subscriber('/joint_states', JointState, jointState)
     yolo = rospy.Subscriber('/yolo', String, yolovision)
     
@@ -175,40 +174,43 @@ def main():
     # Start timer to see how much time it takes to pick up blocks   
     start_time = time.time()
 
+    precise_threshold = 0.008
+    generic_threshold = 0.1
+
     # Start picking up the blocks detected and put in objective list
     for i in range (0, len(objectives)):
         obj = objectives[i].split()
         x=float(obj[1])
         y=float(obj[2])
 
-        #Final position of end effector
-        xef = np.array([x, y, 0.27])
-        #Final orientation of end effector
-        phief = np.array([float(obj[4]), np.pi, 0]) #first value from 0.0 to 3.14
-
         gripper_client(0.0) 
 
+        #Final position of end effector
+        xef = np.array([x, y, 0.3])
+        #Final orientation of end effector
+        phief = np.array([float(obj[4]), np.pi, 0]) #first value from 0.0 to 3.14
+        
         #Calculate joint angle matrix
-        Th = moveTo(xef, phief)
+        Th = moveTo(xef, phief, pub, generic_threshold)
 
         xef = np.array([x, y, 0.225])
-        Th = moveTo(xef, phief) 
+        Th = moveTo(xef, phief, pub, precise_threshold) 
 
         gripper_client(float(blocks[1][int(obj[0])]))
         time.sleep(10)
 
-        xef = np.array([x, y, 0.35])
-        Th = moveTo(xef, phief) 
+        xef = np.array([x, y, 0.38])
+        Th = moveTo(xef, phief, pub, generic_threshold) 
 
         xef = np.array([0.3, -0.6, 0.25])
-        Th = moveTo(xef, phief) 
+        Th = moveTo(xef, phief, pub, precise_threshold) 
 
         gripper_client(0.0)
 
-        time.sleep(1.5)
+        time.sleep(1.9)
 
         xef = np.array([0.3, -0.6, 0.3])
-        Th = moveTo(xef, phief)
+        Th = moveTo(xef, phief, pub, generic_threshold)
 
     end_time = time.time()
     delta_time = end_time-start_time
