@@ -20,7 +20,7 @@ for i in range(11):
         while f==True:
             pos = Pose(Point(random.uniform(0.4, 0.85), random.uniform(-0.3, 0.3), 0.775), Quaternion(0,0,random.uniform(-3.14, 3.14), 0.0))
             for k in range(i):
-                threshold = 0.1
+                threshold = 0.11
                 if np.sqrt((pos.position.x-positions[k].position.x)**2+(pos.position.y-positions[k].position.y)**2) < threshold:
                     print("dist:")
                     print(np.sqrt((pos.position.x-positions[k].position.x)**2+(pos.position.y-positions[k].position.y)**2))
