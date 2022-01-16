@@ -207,7 +207,7 @@ def main():
 
         gripper_client(0.0)
 
-        time.sleep(1.9)
+        time.sleep(2)
 
         xef = np.array([0.3, -0.6, 0.3])
         Th = moveTo(xef, phief, pub, generic_threshold)
