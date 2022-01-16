@@ -101,9 +101,12 @@ def moveTo(xef, phief, pub, threshold):
         xef[1] -= 0.025
 
     if xef[1] > 0.1:
-        xef[0] +=0.02
-    elif xef[1] > -0.1:
         xef[0] +=0.01
+    elif xef[1] > -0.15:
+        xef[0] +=0.005
+    
+    if xef[0] > 0.6 and xef[1] > 0.1:
+        xef[0] += 0.005
 
     xef = np.transpose(xef)
     phief = np.transpose(phief)
