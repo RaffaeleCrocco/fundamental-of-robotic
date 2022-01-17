@@ -134,9 +134,9 @@ if __name__ == '__main__':
     rospy.init_node("yolo")
 
     yolo = torch.hub.load(
-        "/home/ros/Workspace/src/ros_yolo/yolo/yolov5-master",
+        "src/ur5/ur5_gazebo/scripts/yolov5-master",
         "custom",
-        path="/home/ros/Workspace/src/ros_yolo/yolo/best.pt",
+        path="src/ur5/ur5_gazebo/scripts/yolov5-master/best.pt",
         source="local").eval()
 
     pub = rospy.Publisher("yolo", String, queue_size=1)
