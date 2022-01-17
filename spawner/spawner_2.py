@@ -13,11 +13,11 @@ for i in range(11):
     f=True
     #Generate random position
     if i==0:
-        pos = Pose(Point(random.uniform(0.4, 0.85), random.uniform(-0.3, 0.3), 0.775), Quaternion(0,0,random.uniform(-3.14, 3.14), random.uniform(0.0, 1.0)))
+        pos = Pose(Point(random.uniform(0.4, 0.85), random.uniform(-0.3, 0.3), 0.775), Quaternion(0,0,random.uniform(-3.14, 3.14), random.uniform(-1.57, 1.57)))
         positions.append(pos)
     else:
         while f==True:
-            pos = Pose(Point(random.uniform(0.4, 0.85), random.uniform(-0.3, 0.3), 0.775), Quaternion(0,0,random.uniform(-3.14, 3.14), random.uniform(0.0, 1.0)))
+            pos = Pose(Point(random.uniform(0.4, 0.85), random.uniform(-0.3, 0.3), 0.775), Quaternion(0,0,random.uniform(-3.14, 3.14), random.uniform(-1.57, 1.57)))
             for k in range(i):
                 threshold = 0.12
                 if np.sqrt((pos.position.x-positions[k].position.x)**2+(pos.position.y-positions[k].position.y)**2) < threshold:
