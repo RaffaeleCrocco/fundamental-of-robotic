@@ -12,6 +12,9 @@ import numpy as np
 import time
 import math
 from scipy.spatial.transform import Rotation as rot
+from gazebo_ros_link_attacher.srv import Attach, AttachRequest, AttachResponse
+from gazebo_msgs.msg import ModelStates
+
 
 from ur5_inverse import ur5Inverse
 from ur5_direct import ur5Direct
@@ -23,7 +26,7 @@ current_pos = [-0.9, -2, -1.3, 0.0, 0.0, 0]
 objectives = []          # List containing all the objects detected with respective positions and orientations
 
 blocks = np.array([['X1-Y2-Z1', 'X2-Y2-Z2', 'X1-Y3-Z2', 'X1-Y2-Z2', 'X1-Y2-Z2-CHAMFER', 'X1-Y4-Z2', 'X1-Y1-Z2', 'X1-Y2-Z2-TWINFILLET', 'X1-Y3-Z2-FILLET', 'X1-Y4-Z1', 'X2-Y2-Z2-FILLET'],
-                   [0.515,      0.25,       0.515,      0.515,      0.515,              0.515,      0.515,      0.515,                  0.515,              0.515,      0.235],                  # Gripper aperture
+                   [0.515,      0.24,       0.515,      0.515,      0.515,              0.515,      0.515,      0.515,                  0.415,              0.515,      0.23],                  # Gripper aperture
                    [0.11,       0.42,       -0.05,      0.55,       0.26,               0.26,       -0.05,      0.42,                   0.68,               0.1,        0.54],                  # Final x position
                    [-0.54,      -0.66,      -0.66,      -0.54,      -0.54,              -0.7,       -0.54,      -0.54,                  -0.54,              -0.7,       -0.64]])                # Final y position
 
@@ -170,6 +173,14 @@ def yolovision(msg):
 
 def main():
     rospy.init_node('send_joints')
+    rospy.loginfo("Creating ServiceProxy to /link_attacher_node/attach")
+    attach_srv = rospy.ServiceProxy('/link_attacher_node/attach',Attach)
+    attach_srv.wait_for_service()
+    rospy.loginfo("Created ServiceProxy to /link_attacher_node/attach")
+    rospy.loginfo("Creating ServiceProxy to /link_attacher_node/detach")
+    detach_srv = rospy.ServiceProxy('/link_attacher_node/detach',Attach)
+    detach_srv.wait_for_service()
+    rospy.loginfo("Created ServiceProxy to /link_attacher_node/detach")
     pub = rospy.Publisher('/trajectory_controller/command', JointTrajectory, queue_size=10)
     sub = rospy.Subscriber('/joint_states', JointState, jointState)
     yolo = rospy.Subscriber('/yolo', String, yolovision)
@@ -201,26 +212,69 @@ def main():
 
         xef = np.array([x, y, 0.218])
         Th = moveTo(xef, phief, pub, precise_threshold) 
+        # Checks
+        ms = rospy.wait_for_message('/gazebo/model_states', ModelStates)
+        
+        min_dist = 10
+        min_index = 6
+
+        for i in range(6, len(ms.name)):
+            dist = np.sqrt((ms.pose[i].position.x-x)**2+(ms.pose[i].position.y-y)**2)
+            if dist < min_dist:
+                min_dist = dist
+                min_index = i
+        
+        
+
+        # Link them
+        rospy.loginfo("Attaching gripper and lego")
+        req = AttachRequest()
+        req.model_name_1 = "robot"
+        req.link_name_1 = "wrist_3_link"
+        req.model_name_2 = ms.name[min_index]
+        req.link_name_2 = "link"
+
+        attach_srv.call(req)
+        # From the shell:
+        """
+    rosservice call /link_attacher_node/attach "model_name_1: 'robot'
+    link_name_1: 'wrist_3_link'
+    model_name_2: 'blocks[0][int(obj[0])]'
+    link_name_2: 'link'"
+        """
 
         gripper_client(float(blocks[1][int(obj[0])]))
-        time.sleep(10)
+        time.sleep(1)
 
         xef = np.array([x, y, 0.38])
         Th = moveTo(xef, phief, pub, generic_threshold)
 
         xf = float(blocks[2][int(obj[0])])
         yf = float(blocks[3][int(obj[0])])
-        
         xef = np.array([xf, yf, 0.38])
-        Th = moveTo(xef, phief, pub, generic_threshold) 
+        Th = moveTo(xef, phief, pub, generic_threshold)
 
         xef = np.array([xf, yf, 0.25])
         Th = moveTo(xef, phief, pub, precise_threshold) 
 
-        gripper_client(0.0)
+        
+        rospy.loginfo("Detaching gripper and lego")
+        req = AttachRequest()
+        req.model_name_1 = "robot"
+        req.link_name_1 = "wrist_3_link"
+        req.model_name_2 = ms.name[min_index]
+        req.link_name_2 = "link"
 
+        detach_srv.call(req)
+        # From the shell:
+        """
+    rosservice call /link_attacher_node/detach "model_name_1: 'robot'
+    link_name_1: 'wrist_3_link'
+    model_name_2: 'blocks[0][int(obj[0])]'
+    link_name_2: 'link'"
+        """
         time.sleep(2)
-
+        gripper_client(0.0)
         xef = np.array([xf, yf, 0.3])
         Th = moveTo(xef, phief, pub, generic_threshold)
 
