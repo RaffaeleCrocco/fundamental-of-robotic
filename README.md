@@ -5,6 +5,7 @@
   cd src
   git clone https://github.com/JenniferBuehler/gazebo-pkgs.git
   git clone https://github.com/JenniferBuehler/general-message-pkgs.git
+  git clone https://github.com/pal-robotics/gazebo_ros_link_attacher.git
   ```
 
 ## Installation
