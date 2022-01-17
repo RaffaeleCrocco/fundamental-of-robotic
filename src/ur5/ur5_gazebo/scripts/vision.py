@@ -9,6 +9,7 @@ import torch
 import message_filters
 import copy
 import rospy
+import time
 
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
@@ -22,7 +23,7 @@ from std_msgs.msg import String
 table_origin = (0.7, 0)
 table_size   = (0.913, 0.913)
 cam_origin  = (0.7, 0, 1.580)
-
+isTimePrinted = 0
 
 
 # ----------------- UTILITY FUNCTIONS ----------------- #
@@ -49,6 +50,9 @@ def discriminate(depth_map):                                                    
 # ------------------ MAIN FUNCTION ------------------ #
 
 def camera_callback(rgb_img, depth_map):
+
+    time_begin = time.time()                                                                            # taking the time before the recognition
+
     rgb_img = CvBridge().imgmsg_to_cv2(rgb_img, "bgr8")                                                 # conversion of the table disposal from ROS to a standard image
     depth_map = CvBridge().imgmsg_to_cv2(depth_map, "32FC1")                                            # conversion of the black and white depth map from ROS to a standard image
 
@@ -109,6 +113,14 @@ def camera_callback(rgb_img, depth_map):
         message += " " + str(yaw) + " " + str(pitch) + " " + str(roll) + "\n"
 
         cv2.putText(img_clone, f"{lego_class} {lego_coord[0]:.2f} {lego_coord[1]:.2f} {lego_z:.3f}", (x1-100, y2+10), cv2.FONT_HERSHEY_PLAIN, 1, (0, 0, 0), 1)
+
+
+    time_end = time.time()                                                                              # taking the time after the recognition
+    global isTimePrinted
+    if isTimePrinted == 0:
+        print("Time spent:", time_end-time_begin)                                                       # printing the time
+        isTimePrinted = 1                                                                               # setting the isTimePrinted to true
+
     cv2.imshow("Predictions", img_clone)
     cv2.waitKey(1)
 
@@ -122,9 +134,9 @@ if __name__ == '__main__':
     rospy.init_node("yolo")
 
     yolo = torch.hub.load(
-        "src/ur5/ur5_gazebo/scripts/yolov5-master",
+        "/home/ros/Workspace/src/ros_yolo/yolo/yolov5-master",
         "custom",
-        path="src/ur5/ur5_gazebo/scripts/yolov5-master/best.pt",
+        path="/home/ros/Workspace/src/ros_yolo/yolo/best.pt",
         source="local").eval()
 
     pub = rospy.Publisher("yolo", String, queue_size=1)
