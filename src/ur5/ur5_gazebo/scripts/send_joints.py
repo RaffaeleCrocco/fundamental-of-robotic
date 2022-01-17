@@ -185,6 +185,7 @@ def main():
     # Start picking up the blocks detected and put in objective list
     for i in range (0, len(objectives)):
         obj = objectives[i].split()
+        print("detected:", blocks[0][int(obj[0])])
         x=float(obj[1])
         y=float(obj[2])
 
@@ -222,10 +223,9 @@ def main():
 
     end_time = time.time()
     delta_time = end_time-start_time
-    print("KPI 1-2/2-1:")
-    print(delta_time)
+    print("KPI 1-2/2-1:", delta_time)
 
-
+    
 if __name__ == '__main__':
     try:
         main()
