@@ -15,7 +15,7 @@ print(pos)
 print(brick)
 #Call rospy spawn function to spawn objects in gazebo
 spawn_model_client = rospy.ServiceProxy('/gazebo/spawn_sdf_model', SpawnModel)
-spawn_model_client(model_name=''+str(brick)+str(random.random()), 
+spawn_model_client(model_name=''+str(brick), 
     model_xml=open('src/ur5/ur5_gazebo/models/'+brick+'/model.sdf', 'r').read(),
     robot_namespace='/foo',
     initial_pose=pos,
