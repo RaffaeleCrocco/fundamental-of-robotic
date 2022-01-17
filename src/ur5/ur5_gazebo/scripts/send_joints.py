@@ -210,6 +210,9 @@ def main():
 
         xf = float(blocks[2][int(obj[0])])
         yf = float(blocks[3][int(obj[0])])
+        
+        xef = np.array([xf, yf, 0.38])
+        Th = moveTo(xef, phief, pub, generic_threshold) 
 
         xef = np.array([xf, yf, 0.25])
         Th = moveTo(xef, phief, pub, precise_threshold) 
