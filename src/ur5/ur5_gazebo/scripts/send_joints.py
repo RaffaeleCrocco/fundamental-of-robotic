@@ -196,7 +196,7 @@ def main():
         #Calculate joint angle matrix
         Th = moveTo(xef, phief, pub, generic_threshold)
 
-        xef = np.array([x, y, 0.225])
+        xef = np.array([x, y, 0.218])
         Th = moveTo(xef, phief, pub, precise_threshold) 
 
         gripper_client(float(blocks[1][int(obj[0])]))
