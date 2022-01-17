@@ -22,8 +22,6 @@ for i in range(11):
             for k in range(i):
                 threshold = 0.11
                 if np.sqrt((pos.position.x-positions[k].position.x)**2+(pos.position.y-positions[k].position.y)**2) < threshold:
-                    print("dist:")
-                    print(np.sqrt((pos.position.x-positions[k].position.x)**2+(pos.position.y-positions[k].position.y)**2))
                     break
                 if k == i-1:
                     positions.append(pos)
