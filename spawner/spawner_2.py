@@ -14,7 +14,7 @@ for i in range(11):
     f=True
     #Generate random position
     if i==0:
-        pos = Pose(Point(random.uniform(0.4, 0.85), random.uniform(-0.3, 0.3), 0.775), Quaternion(0,0,random.uniform(-3.14, 3.14), 0.0))
+        pos = Pose(Point(random.uniform(0.4, 0.85), random.uniform(-0.3, 0.3), 0.775), Quaternion(0,0,random.uniform(-1.57, 1.57), 0.0))
         positions.append(pos)
     else:
         while f==True:
