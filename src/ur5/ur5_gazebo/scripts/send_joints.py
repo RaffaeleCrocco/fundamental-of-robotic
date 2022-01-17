@@ -23,7 +23,9 @@ current_pos = [-0.9, -2, -1.3, 0.0, 0.0, 0]
 objectives = []          # List containing all the objects detected with respective positions and orientations
 
 blocks = np.array([['X1-Y2-Z1', 'X2-Y2-Z2', 'X1-Y3-Z2', 'X1-Y2-Z2', 'X1-Y2-Z2-CHAMFER', 'X1-Y4-Z2', 'X1-Y1-Z2', 'X1-Y2-Z2-TWINFILLET', 'X1-Y3-Z2-FILLET', 'X1-Y4-Z1', 'X2-Y2-Z2-FILLET'],
-                   [0.515,      0.25,       0.515,      0.515,      0.515,              0.515,      0.515,      0.515,                  0.515,              0.515,      0.25]])
+                   [0.515,      0.25,       0.515,      0.515,      0.515,              0.515,      0.515,      0.515,                  0.515,              0.515,      0.235],                  # Gripper aperture
+                   [0.11,       0.42,       -0.05,      0.55,       0.26,               0.26,       -0.05,      0.42,                   0.68,               0.1,        0.54],                  # Final x position
+                   [-0.54,      -0.66,      -0.66,      -0.54,      -0.54,              -0.7,       -0.54,      -0.54,                  -0.54,              -0.7,       -0.64]])                # Final y position
 
 # Rotation matrix to euler angles function
 def rotm2eul(R):
@@ -183,6 +185,7 @@ def main():
     # Start picking up the blocks detected and put in objective list
     for i in range (0, len(objectives)):
         obj = objectives[i].split()
+        print("detected:", blocks[0][int(obj[0])])
         x=float(obj[1])
         y=float(obj[2])
 
@@ -203,22 +206,24 @@ def main():
         time.sleep(10)
 
         xef = np.array([x, y, 0.38])
-        Th = moveTo(xef, phief, pub, generic_threshold) 
+        Th = moveTo(xef, phief, pub, generic_threshold)
 
-        xef = np.array([0.3, -0.6, 0.25])
+        xf = float(blocks[2][int(obj[0])])
+        yf = float(blocks[3][int(obj[0])])
+
+        xef = np.array([xf, yf, 0.25])
         Th = moveTo(xef, phief, pub, precise_threshold) 
 
         gripper_client(0.0)
 
         time.sleep(2)
 
-        xef = np.array([0.3, -0.6, 0.3])
+        xef = np.array([xf, yf, 0.3])
         Th = moveTo(xef, phief, pub, generic_threshold)
 
     end_time = time.time()
     delta_time = end_time-start_time
-    print("KPI 1-2/2-1:")
-    print(delta_time)
+    print("KPI 1-2/2-1:", delta_time)
 
 
 if __name__ == '__main__':
