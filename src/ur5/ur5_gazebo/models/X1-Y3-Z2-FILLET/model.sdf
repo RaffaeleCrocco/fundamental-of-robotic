@@ -51,6 +51,12 @@
                         <uri>model://X1-Y3-Z2-FILLET/meshes/X1-Y3-Z2-FILLET.stl</uri>
                     </mesh>
                 </geometry>
+                <material>
+                    <script>
+                        <uri>file://media/materials/scripts/gazebo.material</uri>
+                        <name>Gazebo/Grey</name>
+                    </script>
+                </material>
             </visual>
         </link>
     </model>
