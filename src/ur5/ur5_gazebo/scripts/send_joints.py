@@ -153,23 +153,6 @@ def jointState(msg):
     current_pos[4] = msg.position[5]
     current_pos[5] = msg.position[6]
 
-# Function used for reading msgs arriving from yolo topic, giving position and orientation of all blocks detected
-def yolovision(msg):
-    x = str(msg)
-    if (x[1] != "''") and (not objectives):                 # Checking if there is at least one lego block
-        x = x.replace("\\", "")                             # Remove \ character
-        x = x.replace('data: "', "")                        # Remove first cell
-        x = x.replace('"', "")                              # Remove " character
-        x = x.split('n')                                    # Split string where letter n is found
-        x.pop()                                             # Remove last cell
-
-        j=0
-        for i in x:
-            x[j] = x[j].replace('\n', "")
-            objectives.append(x[j])
-            j += 1
-
-
 def main():
     rospy.init_node('send_joints')
     attach_srv = rospy.ServiceProxy('/link_attacher_node/attach',Attach)
@@ -179,7 +162,6 @@ def main():
 
     pub = rospy.Publisher('/trajectory_controller/command', JointTrajectory, queue_size=10)
     sub = rospy.Subscriber('/joint_states', JointState, jointState)
-    #yolo = rospy.Subscriber('/yolo', String, yolovision)
     
     yolo = str(rospy.wait_for_message('/yolo', String))
 
