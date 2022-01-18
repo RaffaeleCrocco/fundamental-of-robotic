@@ -194,30 +194,28 @@ def main():
         y=float(obj[2])
 
         gripper_client(0.0) 
-
-        #Final position of end effector
-        xef = np.array([x, y, 0.3])
-        #Final orientation of end effector
-        phief = np.array([float(obj[4]), np.pi, 0]) #first value from 0.0 to 3.14
+        
+        xef = np.array([x, y, 0.3])                               #Final position of end effector
+        phief = np.array([float(obj[4]), np.pi, 0])               #Final orientation of end effector
         
         #Calculate joint angle matrix
-        Th = moveTo(xef, phief, pub, generic_threshold)
+        moveTo(xef, phief, pub, generic_threshold)
 
         xef = np.array([x, y, 0.218])
         Th = moveTo(xef, phief, pub, precise_threshold) 
-        # Checks
-        ms = rospy.wait_for_message('/gazebo/model_states', ModelStates)
         
+        # Checks if the block that has detected is really the block that is trying to pick up, if not, takes the nearest block
+        ms = rospy.wait_for_message('/gazebo/model_states', ModelStates)
         min_dist = 10
         min_index = 6
-
+        
         for i in range(6, len(ms.name)):
             dist = np.sqrt((ms.pose[i].position.x-x)**2+(ms.pose[i].position.y-y)**2)
             if dist < min_dist:
                 min_dist = dist
                 min_index = i
         
-        # Link them
+        # Request for ataching block to gripper
         rospy.loginfo("Attaching gripper and lego")
         req = AttachRequest()
         req.model_name_1 = "robot"
@@ -242,7 +240,7 @@ def main():
         xef = np.array([xf, yf, 0.25])
         Th = moveTo(xef, phief, pub, precise_threshold) 
 
-        
+        # Request for detaching block from gripper
         rospy.loginfo("Detaching gripper and lego")
         req = AttachRequest()
         req.model_name_1 = "robot"
@@ -253,7 +251,7 @@ def main():
         gripper_client(0.0)
 
         detach_srv.call(req)
-        time.sleep(3)
+        time.sleep(2.5)
         
         xef = np.array([xf, yf, 0.3])
         Th = moveTo(xef, phief, pub, generic_threshold)
