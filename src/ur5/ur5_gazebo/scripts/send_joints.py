@@ -15,7 +15,6 @@ from scipy.spatial.transform import Rotation as rot
 from gazebo_ros_link_attacher.srv import Attach, AttachRequest, AttachResponse
 from gazebo_msgs.msg import ModelStates
 
-
 from ur5_inverse import ur5Inverse
 from ur5_direct import ur5Direct
 
@@ -173,20 +172,32 @@ def yolovision(msg):
 
 def main():
     rospy.init_node('send_joints')
-    rospy.loginfo("Creating ServiceProxy to /link_attacher_node/attach")
     attach_srv = rospy.ServiceProxy('/link_attacher_node/attach',Attach)
     attach_srv.wait_for_service()
-    rospy.loginfo("Created ServiceProxy to /link_attacher_node/attach")
-    rospy.loginfo("Creating ServiceProxy to /link_attacher_node/detach")
     detach_srv = rospy.ServiceProxy('/link_attacher_node/detach',Attach)
     detach_srv.wait_for_service()
-    rospy.loginfo("Created ServiceProxy to /link_attacher_node/detach")
+
     pub = rospy.Publisher('/trajectory_controller/command', JointTrajectory, queue_size=10)
     sub = rospy.Subscriber('/joint_states', JointState, jointState)
-    yolo = rospy.Subscriber('/yolo', String, yolovision)
+    #yolo = rospy.Subscriber('/yolo', String, yolovision)
     
+    yolo = str(rospy.wait_for_message('/yolo', String))
+
+    if (yolo[1] != "''") and (not objectives):                 # Checking if there is at least one lego block
+        yolo = yolo.replace("\\", "")                             # Remove \ character
+        yolo = yolo.replace('data: "', "")                        # Remove first cell
+        yolo = yolo.replace('"', "")                              # Remove " character
+        yolo = yolo.split('n')                                    # Split string where letter n is found
+        yolo.pop()                                             # Remove last cell
+
+        j=0
+        for i in yolo:
+            yolo[j] = yolo[j].replace('\n', "")
+            objectives.append(yolo[j])
+            j += 1
+
     # wait that main node received position from vision script
-    time.sleep(1.5)
+    time.sleep(0.2)
     # Start timer to see how much time it takes to pick up blocks   
     start_time = time.time()
 
@@ -224,8 +235,6 @@ def main():
                 min_dist = dist
                 min_index = i
         
-        
-
         # Link them
         rospy.loginfo("Attaching gripper and lego")
         req = AttachRequest()
