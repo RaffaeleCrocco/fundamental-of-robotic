@@ -25,8 +25,8 @@ current_pos = [-0.9, -2, -1.3, 0.0, 0.0, 0]
 objectives = []          # List containing all the objects detected with respective positions and orientations
 
 blocks = np.array([['X1-Y2-Z1', 'X2-Y2-Z2', 'X1-Y3-Z2', 'X1-Y2-Z2', 'X1-Y2-Z2-CHAMFER', 'X1-Y4-Z2', 'X1-Y1-Z2', 'X1-Y2-Z2-TWINFILLET', 'X1-Y3-Z2-FILLET', 'X1-Y4-Z1', 'X2-Y2-Z2-FILLET'],
-                   [0.5,      0.22,       0.5,      0.5,      0.5,              0.5,      0.5,      0.5,                 0.5,             0.5,      0.22],                  # Gripper aperture
-                   [-0.07,       0.24,       -0.22,      0.38,      0.08,               0.08,       -0.22,      0.23,                  0.54,              -0.07,      0.40],                  # Final x position
+                   [0.5,        0.22,       0.5,        0.5,        0.5,                0.5,        0.5,        0.5,                   0.5,               0.5,        0.22],                  # Gripper aperture
+                   [-0.07,      0.24,       -0.22,      0.38,       0.08,               0.08,       -0.22,      0.23,                  0.54,              -0.07,      0.40],                  # Final x position
                    [-0.54,      -0.67,      -0.68,      -0.54,      -0.54,              -0.7,       -0.55,      -0.54,                 -0.54,             -0.7,       -0.65]])                # Final y position
 
 # Rotation matrix to euler angles function
