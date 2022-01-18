@@ -244,13 +244,6 @@ def main():
         req.link_name_2 = "link"
 
         attach_srv.call(req)
-        # From the shell:
-        """
-    rosservice call /link_attacher_node/attach "model_name_1: 'robot'
-    link_name_1: 'wrist_3_link'
-    model_name_2: 'blocks[0][int(obj[0])]'
-    link_name_2: 'link'"
-        """
 
         gripper_client(float(blocks[1][int(obj[0])]))
         time.sleep(1)
@@ -274,17 +267,12 @@ def main():
         req.link_name_1 = "wrist_3_link"
         req.model_name_2 = ms.name[min_index]
         req.link_name_2 = "link"
+        
+        gripper_client(0.0)
 
         detach_srv.call(req)
-        # From the shell:
-        """
-    rosservice call /link_attacher_node/detach "model_name_1: 'robot'
-    link_name_1: 'wrist_3_link'
-    model_name_2: 'blocks[0][int(obj[0])]'
-    link_name_2: 'link'"
-        """
-        time.sleep(2)
-        gripper_client(0.0)
+        time.sleep(3)
+        
         xef = np.array([xf, yf, 0.3])
         Th = moveTo(xef, phief, pub, generic_threshold)
 
