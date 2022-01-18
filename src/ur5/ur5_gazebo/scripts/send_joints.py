@@ -126,7 +126,6 @@ def moveTo(xef, phief, pub, threshold):
     while not rospy.is_shutdown():
 
         # Check if the arm is in close range, threshold of wanted position
-        #threshold = 0.008
         if (current_pos[0]>Th[6][0]-threshold and current_pos[0]<Th[6][0]+threshold) and (current_pos[1]>Th[6][1]-threshold and current_pos[1]<Th[6][1]+threshold) and (current_pos[2]>Th[6][2]-threshold and current_pos[2] < Th[6][2]+threshold) and (current_pos[3]>Th[6][3]-threshold and current_pos[3] < Th[6][3]+threshold) and (current_pos[4]>Th[6][4]-threshold and current_pos[4] < Th[6][4]+threshold) and (current_pos[5]>Th[6][5]-threshold and current_pos[5] < Th[6][5]+threshold):
             break
 
@@ -165,12 +164,12 @@ def main():
     
     yolo = str(rospy.wait_for_message('/yolo', String))
 
-    if (yolo[1] != "''") and (not objectives):                 # Checking if there is at least one lego block
+    if (yolo[1] != "''") and (not objectives):                    # Checking if there is at least one lego block
         yolo = yolo.replace("\\", "")                             # Remove \ character
         yolo = yolo.replace('data: "', "")                        # Remove first cell
         yolo = yolo.replace('"', "")                              # Remove " character
         yolo = yolo.split('n')                                    # Split string where letter n is found
-        yolo.pop()                                             # Remove last cell
+        yolo.pop()                                                # Remove last cell
 
         j=0
         for i in yolo:
