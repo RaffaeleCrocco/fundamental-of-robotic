@@ -255,12 +255,13 @@ def main():
         gripper_client(float(blocks[1][int(obj[0])]))
         time.sleep(1)
 
-        xef = np.array([x, y, 0.38])
+        xef = np.array([x, y, 0.40])
         Th = moveTo(xef, phief, pub, generic_threshold)
 
         xf = float(blocks[2][int(obj[0])])
         yf = float(blocks[3][int(obj[0])])
-        xef = np.array([xf, yf, 0.38])
+        xef = np.array([xf, yf, 0.40])
+        phief = np.array([0, np.pi, 0]) #first value from 0.0 to 3.14
         Th = moveTo(xef, phief, pub, generic_threshold)
 
         xef = np.array([xf, yf, 0.25])
