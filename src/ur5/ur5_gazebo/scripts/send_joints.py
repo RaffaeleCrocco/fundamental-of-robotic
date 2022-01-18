@@ -160,7 +160,7 @@ def main():
     detach_srv.wait_for_service()
 
     pub = rospy.Publisher('/trajectory_controller/command', JointTrajectory, queue_size=10)
-    sub = rospy.Subscriber('/joint_states', JointState, jointState)
+    rospy.Subscriber('/joint_states', JointState, jointState)
     
     yolo = str(rospy.wait_for_message('/yolo', String))
 
@@ -201,7 +201,7 @@ def main():
         moveTo(xef, phief, pub, generic_threshold)
 
         xef = np.array([x, y, 0.218])
-        Th = moveTo(xef, phief, pub, precise_threshold) 
+        moveTo(xef, phief, pub, precise_threshold) 
         
         # Checks if the block that has detected is really the block that is trying to pick up, if not, takes the nearest block
         ms = rospy.wait_for_message('/gazebo/model_states', ModelStates)
@@ -228,16 +228,16 @@ def main():
         time.sleep(1)
 
         xef = np.array([x, y, 0.40])
-        Th = moveTo(xef, phief, pub, generic_threshold)
+        moveTo(xef, phief, pub, generic_threshold)
 
         xf = float(blocks[2][int(obj[0])])
         yf = float(blocks[3][int(obj[0])])
         xef = np.array([xf, yf, 0.40])
         phief = np.array([0, np.pi, 0]) #first value from 0.0 to 3.14
-        Th = moveTo(xef, phief, pub, generic_threshold)
+        moveTo(xef, phief, pub, generic_threshold)
 
         xef = np.array([xf, yf, 0.25])
-        Th = moveTo(xef, phief, pub, precise_threshold) 
+        moveTo(xef, phief, pub, precise_threshold) 
 
         # Request for detaching block from gripper
         rospy.loginfo("Detaching gripper and lego")
@@ -253,7 +253,7 @@ def main():
         time.sleep(2.5)
         
         xef = np.array([xf, yf, 0.3])
-        Th = moveTo(xef, phief, pub, generic_threshold)
+        moveTo(xef, phief, pub, generic_threshold)
 
     end_time = time.time()
     delta_time = end_time-start_time
