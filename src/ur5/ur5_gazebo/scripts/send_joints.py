@@ -194,7 +194,7 @@ def main():
 
         gripper_client(0.0) 
         
-        xef = np.array([x, y, 0.3])                               #Final position of end effector
+        xef = np.array([x, y, 0.36])                               #Final position of end effector
         phief = np.array([float(obj[4]), np.pi, 0])               #Final orientation of end effector
         
         #Calculate joint angle matrix
@@ -227,12 +227,13 @@ def main():
         gripper_client(float(blocks[1][int(obj[0])]))
         time.sleep(1)
 
-        xef = np.array([x, y, 0.40])
+        xef = np.array([x, y, 0.36])
         moveTo(xef, phief, pub, generic_threshold)
 
         xf = float(blocks[2][int(obj[0])])
         yf = float(blocks[3][int(obj[0])])
-        xef = np.array([xf, yf, 0.40])
+        
+        xef = np.array([xf, yf, 0.36])
         phief = np.array([0, np.pi, 0]) #first value from 0.0 to 3.14
         moveTo(xef, phief, pub, generic_threshold)
 
